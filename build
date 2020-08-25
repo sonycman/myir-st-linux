@@ -1,0 +1,15 @@
+#source /opt/st/myir/2.6-snapshot/environment-setup-cortexa7t2hf-neon-vfpv4-openstlinux_weston-linux-gnueabi
+source /opt/st/myir/3.1-snapshot/environment-setup-cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi
+
+#make ARCH=arm O="$PWD/../build" multi_v7_defconfig 
+make ARCH=arm O="$PWD/../build" myc-ya157c_defconfig
+make ARCH=arm uImage vmlinux dtbs LOADADDR=0xC2000040 O="$PWD/../build" -j4
+make ARCH=arm modules O="$PWD/../build" -j4
+
+make ARCH=arm INSTALL_MOD_PATH="$PWD/../build/install_artifact" modules_install O="$PWD/../build"
+mkdir -p $PWD/../build/install_artifact/boot/
+cp $PWD/../build/arch/arm/boot/uImage $PWD/../build/install_artifact/boot/
+cp $PWD/../build/arch/arm/boot/dts/stm32mp157c-ya157c*.dtb $PWD/../build/install_artifact/boot/
+
+#cp $PWD/../build/arch/arm/boot/dts/stm32mp151c-ya151c*.dtb $PWD/../build/install_artifact/boot/
+#cp $PWD/../build/arch/arm/boot/dts/stm32mp153c-ya153c*.dtb $PWD/../build/install_artifact/boot/

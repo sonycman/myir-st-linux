@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Based on stm32mp157a device number configuration
+ * Author: licy.li@myirtech.com
+ */
+
+/dts-v1/;
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15xa.dtsi"
+#include "stm32mp157-ya157c-pinctrl.dtsi"
+#include "stm32mp15xxac-pinctrl.dtsi"
+#include "stm32mp15xx-ya157c-pmic.dtsi"
+#include "stm32mp15xx-ya157c.dtsi"
+
+/ {
+	model = "MYIR YA157C v1 www.myir-tech.com";
+	compatible = "myir,stm32mp157c-ya157c-v1", "st,stm32mp157";
+
+	aliases {
+		ethernet0 = &ethernet0;
+		serial0 = &uart4;
+		serial2 = &uart8;//rs232
+		serial3 = &uart5;//rs485
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	reserved-memory {
+		gpu_reserved: gpu@dc000000 {
+			reg = <0xdc000000 0x4000000>;
+			no-map;
+		};
+
+		optee_memory: optee@0xde000000 {
+			reg = <0xde000000 0x02000000>;
+			no-map;
+		};
+
+	};
+
+};
+
+&optee {
+	status = "okay";
+};
+
+
+
+
+
+
+
+

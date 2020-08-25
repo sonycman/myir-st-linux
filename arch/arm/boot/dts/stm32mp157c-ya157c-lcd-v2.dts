@@ -1,0 +1,55 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+* Copyright (C) MYIR 2019 - All Rights Reserved
+* Author: myir
+* support:support.cn@myirtech.com 
+*/
+
+/dts-v1/;
+
+#include "stm32mp157c-ya157c-v2.dts"
+
+/ {
+    	 model = "MYIR YA157C v2 www.myir-tech.com";
+   	 compatible = "myir,stm32mp157c-ya157c-v2", "st,stm32mp157";
+	/*LCD Panel*/
+	panel {
+		compatible = "myir,070tft";
+        	pinctrl-names = "default", "sleep";
+        	pinctrl-0 = <&ltdc_pins_a>;
+        	pinctrl-1 = <&ltdc_pins_sleep_a>;
+		enable-gpios = <&gpioe 12 GPIO_ACTIVE_HIGH>;
+        	reset-gpios = <&gpioe 11 GPIO_ACTIVE_HIGH>;
+
+		//backlight = <&panel_backlight>;
+       	 	status = "okay";
+		
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&ltdc_ep0_out>;			
+			};
+	
+		};
+	};
+	
+	 
+};
+
+
+/*test LCD*/
+&ltdc {
+        status = "okay";
+
+        port {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                ltdc_ep0_out: endpoint@0 {
+                                reg = <0>;
+                                remote-endpoint = <&panel_in>;
+                                };
+           };
+};
+
+
+

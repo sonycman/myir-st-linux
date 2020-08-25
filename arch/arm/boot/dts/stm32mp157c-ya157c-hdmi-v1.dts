@@ -1,0 +1,100 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+* Copyright (C) MYIR 2019 - All Rights Reserved
+* Author: myir
+* support:support.cn@myirtech.com 
+*/
+
+/dts-v1/;
+
+#include "stm32mp157c-ya157c-v1.dts"
+
+/ {
+    model = "MYIR YA157C v1 www.myir-tech.com";
+    compatible = "myir,stm32mp157c-ya157c-v1", "st,stm32mp157";
+    
+    sound {
+
+        compatible = "audio-graph-card";
+        label = "STM32MP1-DK";
+        routing =
+                "Playback" , "MCLK",
+                "Capture" , "MCLK",
+                "MICL" , "Mic Bias";
+        dais = <&i2s2_port>;
+        status = "okay";
+    };
+
+};
+
+&i2c2 {
+	hdmi-transmitter@39 {
+		compatible = "sil,sii9022";
+		reg = <0x39>;
+	//	iovcc-supply = <&v3v3_hdmi>;
+	//	cvcc12-supply = <&v1v2_hdmi>;
+		reset-gpios = <&gpioc 7 GPIO_ACTIVE_LOW>;
+		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
+		interrupt-parent = <&gpioa>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&ltdc_pins_a>;
+		pinctrl-1 = <&ltdc_pins_sleep_a>;
+		status = "okay";
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				sii9022_in: endpoint {
+					remote-endpoint = <&ltdc_ep1_out>;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				sii9022_tx_endpoint: endpoint {
+					remote-endpoint = <&i2s2_endpoint>;
+				};
+			};
+		};
+	};
+
+
+};
+
+&i2s2 {
+	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
+	clock-names = "pclk", "i2sclk", "x8k", "x11k";
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&i2s2_pins_a>;
+	pinctrl-1 = <&i2s2_pins_sleep_a>;
+	status = "okay";
+
+	i2s2_port: port {
+		i2s2_endpoint: endpoint {
+			remote-endpoint = <&sii9022_tx_endpoint>;
+			format = "i2s";
+			mclk-fs = <256>;
+		};
+	};
+};
+
+
+/* test HDMI*/
+&ltdc {
+    status = "okay";
+    port {
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            ltdc_ep1_out: endpoint@1 {
+                          reg = <1>;
+                          remote-endpoint = <&sii9022_in>;
+                         };
+        };
+};
+
+
+

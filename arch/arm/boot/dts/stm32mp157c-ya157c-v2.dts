@@ -1,0 +1,176 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Based on stm32mp157a device number configuration
+ * Author: licy.li@myirtech.com
+ */
+
+/dts-v1/;
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15xa.dtsi" 
+#include "stm32mp157-ya157c-pinctrl.dtsi"
+#include "stm32mp15xxac-pinctrl.dtsi"
+#include "stm32mp15xx-ya157c.dtsi"
+
+/ {
+	model = "MYIR YA157C v2 www.myir-tech.com";
+	compatible = "myir,stm32mp157c-ya157c-v2", "st,stm32mp157";
+
+	aliases {
+		ethernet0 = &ethernet0;
+		serial0 = &uart4;
+		serial2 = &uart8;//rs232
+		serial3 = &uart5;//rs485
+		serial4 = &uart7;//bt
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	reserved-memory {
+		gpu_reserved: gpu@da000000 {
+			reg = <0xda000000 0x4000000>;
+			no-map;
+		};
+
+		optee_memory: optee@0xde000000 {
+			reg = <0xde000000 0x02000000>;
+			no-map;
+		};
+	};
+	 
+	myir_driver {
+                compatible = "myir,ar8035";
+                reset-gpios = <&gpiog 0 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+        };
+
+	
+
+	vmmcsd_fixed: fixedregulator@0 {
+		compatible = "regulator-fixed";
+		regulator-name = "vmmcsd_fixed";
+		regulator-min-microvolt = <3300000>;
+        	regulator-max-microvolt = <3300000>;
+		
+	};
+
+   	vmmc: fixedregulator@1 {
+        	compatible = "regulator-fixed";
+        	regulator-name = "vmmc";
+        	regulator-min-microvolt = <3300000>;
+        	regulator-max-microvolt = <3300000>;
+        	startup-delay-us = <70000>;
+       		 enable-active-high;  
+    	};
+
+
+	regulators {
+		compatible = "simple-bus";
+            	#address-cells = <1>;
+            	#size-cells = <0>;
+
+			vddcore: buck1 {
+				regulator-name = "vddcore";
+				regulator-min-microvolt = <1200000>;
+				regulator-max-microvolt = <1350000>;
+				regulator-always-on;
+				regulator-initial-mode = <0>;
+				regulator-over-current-protection;
+			};
+
+			vdd_ddr: buck2 {
+				regulator-name = "vdd_ddr";
+				regulator-min-microvolt = <1350000>;
+				regulator-max-microvolt = <1350000>;
+				regulator-always-on;
+				regulator-initial-mode = <0>;
+				regulator-over-current-protection;
+			};
+
+			vdd: buck3 {
+				regulator-name = "vdd";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
+				st,mask-reset;
+				regulator-initial-mode = <0>;
+				regulator-over-current-protection;
+			};
+
+			v3v3: buck4 {
+				regulator-name = "v3v3";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
+				regulator-over-current-protection;
+				regulator-initial-mode = <0>;
+				
+			};
+
+			vdda: ldo1 {
+				regulator-name = "v1v8_audio";
+				regulator-min-microvolt = <1700000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
+				//interrupts = <IT_CURLIM_LDO1 0>;
+
+			};
+
+			v1v2_hdmi: ldo2 {
+				regulator-name = "v1v2_hdmi";
+				regulator-min-microvolt = <1200000>;
+				regulator-max-microvolt = <1200000>;
+				regulator-always-on;
+				//interrupts = <IT_CURLIM_LDO2 0>;
+
+			};
+
+
+			vref_ddr: vref_ddr {
+				regulator-name = "vref_ddr";
+				regulator-always-on;
+				regulator-over-current-protection;
+			};
+
+			 bst_out: boost {
+				regulator-name = "bst_out";
+				//interrupts = <IT_OCP_BOOST 0>;
+			 };
+
+		};
+
+};
+
+&optee {
+	status = "okay";
+};
+
+
+
+/* Wifi */
+&sdmmc3 {
+	vmmc-supply = <&vmmcsd_fixed>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+	status = "okay";
+
+};
+
+/*emmc*/
+&sdmmc2 {
+	vmmc-supply = <&vmmc>;
+        vqmmc-supply = <&vmmc>;
+        status = "okay";
+};
+
+/*SD card*/
+&sdmmc1 {
+	vmmc-supply = <&vmmcsd_fixed>;
+	status = "okay";
+};
+
+
+
+
+
