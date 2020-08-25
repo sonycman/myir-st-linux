@@ -134,10 +134,6 @@
 				regulator-over-current-protection;
 			};
 
-			 bst_out: boost {
-				regulator-name = "bst_out";
-				//interrupts = <IT_OCP_BOOST 0>;
-			 };
 
 		};
 
