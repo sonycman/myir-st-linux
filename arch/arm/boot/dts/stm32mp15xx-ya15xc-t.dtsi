@@ -90,7 +90,7 @@
 
                 blue_ex {
                         label = "heartbeat";
-                        gpios = <&pcf8575 4 GPIO_ACTIVE_HIGH>;
+                        gpios = <&pcf8575 4 GPIO_ACTIVE_LOW>;
                         linux,default-trigger = "heartbeat";
                         default-state = "off";
                 };
