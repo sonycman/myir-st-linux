@@ -15,9 +15,4 @@
 			opp-microvolt = <1200000>;
 			opp-supported-hw = <0x1>;
 		};
-        opp-216666666 {
-			opp-hz = /bits/ 64 <216666666>;
-			opp-microvolt = <1200000>;
-			opp-supported-hw = <0x1>;
-		};
 };

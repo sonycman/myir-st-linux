@@ -89,7 +89,7 @@
                 };
 
                 blue_ex {
-                        label = "heartbeat";
+                        label = "heartbeat-ex";
                         gpios = <&pcf8575 4 GPIO_ACTIVE_LOW>;
                         linux,default-trigger = "heartbeat";
                         default-state = "off";
@@ -113,12 +113,12 @@
 	bt_pwrseq {
                 compatible = "myir,bt_pwr";
                 bt-gpios = <&pcf8575 3 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+		status = "disabled";
         };	
 	cam_pwrseq {
 		compatible = "myir,cam_pwr";
 		cam-gpios = <&pcf8575 1 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+		status = "disabled";
 	};
 	
 	/*pwm for backlight*/
@@ -293,7 +293,7 @@
               touchscreen-size-y = <480>;
 
               reset-gpios = <&gpioe 11 GPIO_ACTIVE_LOW>;
-              status = "okay";
+              status = "disabled";
       };
 
 	 
@@ -304,7 +304,7 @@
                 interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
                 gpios = <&gpioa 15 0>;
                 ti,x-plate-ohms = <180>;
-                status = "okay";
+                status = "disabled";
         };
         
 
@@ -347,7 +347,7 @@
                 clocks = <&clk_ext_camera>;
                 clock-names = "xvclk";
                 reset-gpios = <&pcf8575 0 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
-                status = "okay";
+                status = "disabled";
                 
                 port {
                         camera0: endpoint {
@@ -536,7 +536,7 @@
 
 /*DCMI for camera*/
 &dcmi {
-        status = "okay";
+        status = "disabled";
         pinctrl-names = "default", "sleep";
         pinctrl-0 = <&dcmi_pins_mx>;
         pinctrl-1 = <&dcmi_sleep_pins_mx>;
@@ -603,7 +603,7 @@
      #address-cells = <1>;
      #size-cells = <0>;
      keep-power-in-suspend;
-     status = "okay";
+     status = "disabled";
  
      brcmf: bcrmf@1 {
          reg = <1>;
